@@ -3,7 +3,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const connectToDatabase = async () => {
-    const uri = "mongodb+srv://admin:KG5kQf6yPpqfx8rb@blooddonation.az943qj.mongodb.net/?retryWrites=true&w=majority&appName=blooddonation";
+let uri = process.env.MONGO_URI;    
     console.log(uri);
   try {
     await mongoose.connect(uri);
