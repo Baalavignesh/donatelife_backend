@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.1",
     "nodemon": "^3.1.9"
   },
   "name": "hoohacks_backened",
@@ -12,5 +15,8 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.13.14"
+  }
 }
