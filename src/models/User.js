@@ -11,14 +11,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
+  bloodGroup: {
+    type: String,
     required: true,
-    min: [0, 'Age cannot be negative']
+    enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
   },
   location: {
-    type: Object,
-    required: true,
     lat: {
       type: Number,
       required: true,
@@ -32,16 +30,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    match: [/^\d{10}$/, 'Please enter a valid 10-digit phone number']
+    match: [/^\d{10}$/, 'Please enter a valid 10-digit phone number'],
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-
-
 const User = mongoose.model('User', userSchema);
-
-module.exports = User; 
+module.exports = User;
