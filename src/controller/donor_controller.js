@@ -2,7 +2,7 @@ const BankRequestSchema = require("../models/Request");
 
 let GetSpecificBankRequest = async (req, res) => {
     try {
-        console.log(req.params.blood_group);
+        console.log(req.params);
 
         let bankRequest = await BankRequestSchema.find({group: req.params.blood_group}); 
         if (bankRequest.length === 0) {
@@ -14,6 +14,6 @@ let GetSpecificBankRequest = async (req, res) => {
         console.error("Error fetching bank request:", error);
         res.status(500).json({ message: error.message });
     }
-}   
+}
 
 module.exports = { GetSpecificBankRequest };

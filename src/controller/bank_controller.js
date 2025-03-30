@@ -1,4 +1,5 @@
 const BankRequestSchema = require('../models/Request');
+const User = require('../models/User');
 
 let CreateBankRequest = async (req, res) => {
     try {
@@ -55,6 +56,20 @@ let UpdateBankRequest = async (req, res) => {
     }
 }           
 
+let GetSpecificBloodGroup = async (req, res) => {
+    try {
+        console.log(req.params);
+        let bloodGroup = req.params.blood_group;
+        let bankRequest = await User.find({ bloodGroup: bloodGroup});
+        console.log(bankRequest);
+        res.status(200).json(bankRequest);
+    }
+    catch (error) {
+        console.error("Error fetching bank request:", error);
+        res.status(500).json({ message: error.message });
+    }
+}
 
 
-module.exports = { CreateBankRequest, GetBankRequest, UpdateBankRequest };
+
+module.exports = { CreateBankRequest, GetBankRequest, UpdateBankRequest, GetSpecificBloodGroup   };
