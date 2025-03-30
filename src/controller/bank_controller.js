@@ -111,4 +111,54 @@ let GetUsersWithinRadius = async (req, res) => {
     }
 }
 
-module.exports = { CreateBankRequest, GetBankRequest, UpdateBankRequest, GetSpecificBloodGroup, GetUsersWithinRadius };
+let SendSMS = async (req, res) => {
+    try {
+        const { recipients, message } = req.body;
+        
+        if (!recipients || !message || !Array.isArray(recipients)) {
+            return res.status(400).json({ 
+                message: "Invalid request: recipients array and message are required" 
+            });
+        }
+        
+        const axios = require('axios');
+        const results = [];
+        
+        // Send SMS to each recipient
+        for (const recipient of recipients) {
+            try {
+                const response = await axios.post('https://textbelt.com/text', {
+                    phone: recipient.phone,
+                    message: message,
+                    key: 'textbelt', // You might want to store this in an env variable
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                results.push({
+                    recipient: recipient,
+                    success: response.data.success,
+                    message: response.data.message || 'Message sent successfully',
+                });
+            } catch (error) {
+                results.push({
+                    recipient: recipient,
+                    success: false,
+                    message: error.message || 'Failed to send message',
+                });
+            }
+        }
+        
+        res.status(200).json({
+            overallSuccess: results.some(r => r.success),
+            results: results
+        });
+    } catch (error) {
+        console.error("Error sending SMS:", error);
+        res.status(500).json({ message: "Error sending SMS", error: error.message });
+    }
+};
+
+module.exports = { CreateBankRequest, GetBankRequest, UpdateBankRequest, GetSpecificBloodGroup, GetUsersWithinRadius, SendSMS };
