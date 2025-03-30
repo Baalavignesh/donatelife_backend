@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
     // Assuming username is an email
   },
   password: {
@@ -40,6 +39,7 @@ const userSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
 
 
 const User = mongoose.model('User', userSchema);
