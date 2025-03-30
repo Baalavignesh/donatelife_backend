@@ -70,6 +70,45 @@ let GetSpecificBloodGroup = async (req, res) => {
     }
 }
 
+let GetUsersWithinRadius = async (req, res) => {
+    try {
+        const { longitude, latitude, radius, bloodGroup } = req.body;
+        
+        // Validate required fields
+        if (!longitude || !latitude || !radius) {
+            return res.status(400).json({ 
+                message: "Missing required fields: longitude, latitude, and radius are required" 
+            });
+        }
 
+        // Build the query
+        let query = {
+            location: {
+                $nearSphere: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                    },
+                    $maxDistance: parseFloat(radius) * 1000 // Convert km to meters
+                }
+            }
+        };
 
-module.exports = { CreateBankRequest, GetBankRequest, UpdateBankRequest, GetSpecificBloodGroup   };
+        // Add blood group filter if provided
+        if (bloodGroup) {
+            query.bloodGroup = bloodGroup;
+        }
+
+        // Execute the query
+        const users = await User.find(query);
+        
+        console.log(`Found ${users.length} users within ${radius}km radius`);
+        res.status(200).json(users);
+    }
+    catch (error) {
+        console.error("Error finding users within radius:", error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+module.exports = { CreateBankRequest, GetBankRequest, UpdateBankRequest, GetSpecificBloodGroup, GetUsersWithinRadius };

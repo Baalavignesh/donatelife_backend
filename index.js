@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
-// const user = require("./src/constant/user");
+const user = require("./src/constant/sampleUsers");
 
 const authRouter = require("./src/routes/authRouter");
 const { connectToDatabase } = require("./src/services/mongodb");
@@ -23,11 +23,11 @@ connectToDatabase();
 app.get("/", (req, res) => {
   res.send("Hello World");
 
-//   user.forEach(async (user) => {
-//     console.log(user);
-//     const userModel = new User(user);
-//     await userModel.save();
-//   });
+  user.forEach(async (user) => {
+    console.log(user);
+    const userModel = new User(user);
+    await userModel.save();
+  });
 });
 
 app.use("/api/auth", authRouter);

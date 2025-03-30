@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -11,26 +11,27 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true
+    }
+  },
   bloodGroup: {
     type: String,
     required: true,
     enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
   },
-  location: {
-    lat: {
-      type: Number,
-      required: true,
-    },
-    long: {
-      type: Number,
-      required: true,
-    },
-  },
   phoneNumber: {
     type: String,
     required: true,
     trim: true,
-    match: [/^\d{10}$/, 'Please enter a valid 10-digit phone number'],
+    match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],
   },
   createdAt: {
     type: Date,
@@ -38,5 +39,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model('User', userSchema);
+// Create a 2dsphere index on the location field
+userSchema.index({ location: "2dsphere" });
+
+const User = mongoose.model("User", userSchema);
 module.exports = User;

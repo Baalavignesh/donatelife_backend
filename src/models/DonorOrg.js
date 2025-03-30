@@ -17,16 +17,15 @@ const donorOrgSchema = new mongoose.Schema({
     required: true,
   },
   location: {
-    type: Object,
-    required: true,
-    lat: {
-      type: Number,
-      required: true,
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
     },
-    long: {
-      type: Number,
-      required: true,
-    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true
+    }
   },
   phoneNumber: {
     type: String,
@@ -40,6 +39,8 @@ const donorOrgSchema = new mongoose.Schema({
   }
 });
 
+// Create a 2dsphere index on the location field
+donorOrgSchema.index({ location: "2dsphere" });
 
 const DonorOrg = mongoose.model('DonorOrg', donorOrgSchema);
 
