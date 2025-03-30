@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const authRouter = require('./src/routes/authRouter');
 const { connectToDatabase } = require('./src/services/mongodb');
+const bankRouter = require('./src/routes/monogRouter');
 
 const port = process.env.PORT || 3000;
 
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/bank', bankRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

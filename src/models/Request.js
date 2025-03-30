@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
 
-const RequestSchema = new mongoose.Schema({
+const BankRequestSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
-    unique: true,
   },
-  loc: {
+  location: {
     lat: {
       type: Number,
       required: true,
@@ -21,17 +20,16 @@ const RequestSchema = new mongoose.Schema({
     enum: ["pending", "fulfilled"],
     default: "pending",
   },
-  type: {
+  group: {
     type: String,
     required: true, // e.g., "A+"
   },
   urgency: {
     type: String,
-    enum: ["low", "high"],
-    default: "low",
+    enum: ["Low", "High"],
+    default: "Low",
   },
 
-  // ✅ New Field: Array of lat/long for users the notification was sent to
   reachedUsers: [
     {
       lat: { type: Number, required: true },
@@ -40,6 +38,4 @@ const RequestSchema = new mongoose.Schema({
   ],
 }, { timestamps: true });
 
-module.exports = mongoose.model("Request", RequestSchema);
-
-module.exports = Request;
+module.exports = mongoose.model("Request", BankRequestSchema);
